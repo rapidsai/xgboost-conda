@@ -24,7 +24,7 @@ requirements:
     - distributed >=1.16.0
     - xgboost
     - cudf
-    - dask_cudf
+    - dask-cudf
 
 test:
   imports:

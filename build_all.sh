@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PATH=/conda/bin:/usr/local/cuda/bin:$PATH
+export HOME=$WORKSPACE
 
 source activate gdf
 

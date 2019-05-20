@@ -1,0 +1,140 @@
+{% set name = "xgboost" %}
+{% set cudf_version = environ.get('CUDF_VERSION', "0.8.*") %}
+
+package:
+  name: {{ name|lower }}
+  version: 0.83.dev43
+
+source:
+  # we have to use git urls here to get the submodules needed for the
+  # build
+  git_url: https://github.com/rapidsai/xgboost
+  git_tag: cudf-interop
+  patches:
+    # xgboost patches
+    - 0001-conda-Unbundle-libxgboost.-dll-dylib-so.patch
+    - 0002-Fix-R-package-PKGROOT.patch
+    - 0003-Fix-R-package-mingw-w64-compiler-flags-remove-m64.patch
+    - 0004-Fix-configure-check-for-OpenMP-on-macOS.patch
+    - 0005-Add-ADD_-FLAGS-to-end-of-commandlines.patch  # [not osx]
+    - 0005-Add-ADD_-FLAGS-to-end-of-commandlines-osx.patch  # [osx]
+    # Use shared NCCL library
+    - PR_4447.patch
+
+build:
+  number: 1
+  skip: true  # [win or linux32]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
+    - git
+    - cmake
+    - make
+    - llvm-openmp >=4.0.1  # [osx]
+  host:
+    - libcudf {{ cudf_version }} # [xgboost_proc_type == "gpu"]
+    - nccl 2.*             # [xgboost_proc_type == "gpu"]
+    - llvm-openmp >=4.0.1  # [osx]
+
+outputs:
+  - name: xgboost-proc
+    version: 1.0.0
+    build:
+      number: 0
+      string: "{{ xgboost_proc_type }}"
+    about:
+      home: https://github.com/conda-forge/xgboost-feedstock
+      license: BSD-3-Clause
+      license_family: BSD
+      summary: A meta-package to select CPU or GPU build.
+
+  - name: libxgboost
+    script: install-libxgboost.sh
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
+        - git
+        - cmake
+        - make
+        - llvm-openmp >=4.0.1  # [osx]
+      host:
+        - llvm-openmp >=4.0.1  # [osx]
+        - libcudf {{ cudf_version }} # [xgboost_proc_type == "gpu"]
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
+      run:
+        - llvm-openmp >=4.0.1  # [osx]
+      run_constrained:
+        - xgboost-proc * {{ xgboost_proc_type }}
+
+  - name: py-xgboost
+    script: install-py-xgboost.sh
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
+        - llvm-openmp >=4.0.1  # [osx]
+      host:
+        - {{ pin_subpackage('libxgboost', exact=True) }}
+        - python
+        - setuptools
+        - pip
+        - llvm-openmp >=4.0.1  # [osx]
+      run:
+        - {{ pin_subpackage('libxgboost', exact=True) }}
+        - llvm-openmp >=4.0.1  # [osx]
+        - python
+        - numpy
+        - scipy
+        - scikit-learn
+      run_constrained:
+        - xgboost-proc * {{ xgboost_proc_type }}
+    test:
+      script: test-py-xgboost.py
+      imports:
+        - xgboost
+
+  - name: py-xgboost
+    requirements:
+      host:
+        - python
+      run:
+        - python
+        - {{ pin_subpackage('py-xgboost', exact=True) }}
+      run_constrained:
+        - xgboost-proc * {{ xgboost_proc_type }}
+
+  - name: xgboost
+    requirements:
+      host:
+        - python
+      run:
+        - python
+        - {{ pin_subpackage('py-xgboost', exact=True) }}
+
+about:
+  home: https://github.com/dmlc/xgboost
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: |
+    Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for
+    Python, R, Java, Scala, C++ and more. Runs on single machine, Hadoop, Spark, Flink
+    and DataFlow
+  description: |
+    XGBoost is an optimized distributed gradient boosting library designed to be highly efficient,
+    flexible and portable. It implements machine learning algorithms under the Gradient Boosting
+    framework. XGBoost provides a parallel tree boosting (also known as GBDT, GBM) that solve many
+    data science problems in a fast and accurate way. The same code runs on major distributed
+    environment (Hadoop, SGE, MPI) and can solve problems beyond billions of examples.
+  doc_url: https://xgboost.readthedocs.io/
+  dev_url: https://github.com/dmlc/xgboost/
+
+extra:
+  recipe-maintainers:
+    - beckermr
+    - aldanor

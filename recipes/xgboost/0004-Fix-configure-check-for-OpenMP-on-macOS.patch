@@ -1,0 +1,39 @@
+diff --git a/R-package/configure b/R-package/configure
+index 7db7190..ab1cd9f 100755
+--- a/R-package/configure
++++ b/R-package/configure
+@@ -1661,7 +1661,13 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+-
++# find R home and set CC/CFLAGS
++: ${R_HOME=`R RHOME`}
++if test -z "${R_HOME}"; then
++  echo "could not determine R_HOME"
++  exit 1
++fi
++RBIN="${R_HOME}/bin/R"
+
+ OPENMP_CXXFLAGS=""
+
+diff --git a/R-package/configure.ac b/R-package/configure.ac
+index d9b706e..6b37ca1 100644
+--- a/R-package/configure.ac
++++ b/R-package/configure.ac
+@@ -2,7 +2,15 @@
+
+ AC_PREREQ(2.62)
+
+-AC_INIT([xgboost],[0.6-3],[],[xgboost],[])
++AC_INIT([xgboost],[0.8-0],[],[xgboost],[])
++
++# find R home and set CC/CFLAGS
++: ${R_HOME=`R RHOME`}
++if test -z "${R_HOME}"; then
++  echo "could not determine R_HOME"
++  exit 1
++fi
++RBIN="${R_HOME}/bin/R"
+
+ OPENMP_CXXFLAGS=""

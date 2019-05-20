@@ -1,0 +1,22 @@
+From 719e38ae3aa1a0432e6bdeb151822d370dea7ad6 Mon Sep 17 00:00:00 2001
+From: John Kirkham <jakirkham@gmail.com>
+Date: Tue, 7 May 2019 04:03:04 -0400
+Subject: [PATCH] Use shared NCCL library
+
+---
+ cmake/modules/FindNccl.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/modules/FindNccl.cmake b/cmake/modules/FindNccl.cmake
+index 2d39abf19..ec98a8632 100644
+--- a/cmake/modules/FindNccl.cmake
++++ b/cmake/modules/FindNccl.cmake
+@@ -33,7 +33,7 @@
+ # This module assumes that the user has already called find_package(CUDA)
+ 
+ 
+-set(NCCL_LIB_NAME nccl_static)
++set(NCCL_LIB_NAME nccl)
+ 
+ find_path(NCCL_INCLUDE_DIR
+   NAMES nccl.h

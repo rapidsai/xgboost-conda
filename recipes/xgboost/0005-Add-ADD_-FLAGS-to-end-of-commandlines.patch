@@ -1,0 +1,30 @@
+diff --git a/Makefile b/Makefile
+index 9ad197e..41b6696 100644
+--- a/Makefile
++++ b/Makefile
+@@ -68,7 +68,7 @@ endif
+ endif
+
+ export LDFLAGS= -pthread -lm $(ADD_LDFLAGS) $(DMLC_LDFLAGS) $(PLUGIN_LDFLAGS)
+-export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude $(ADD_CFLAGS) $(PLUGIN_CFLAGS)
++export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude $(PLUGIN_CFLAGS)
+ CFLAGS += -I$(DMLC_CORE)/include -I$(RABIT)/include -I$(GTEST_PATH)/include
+ #java include path
+ export JAVAINCFLAGS = -I${JAVA_HOME}/include -I./java
+@@ -110,12 +110,16 @@ endif
+
+ OPENMP_FLAGS =
+ ifeq ($(USE_OPENMP), 1)
+-	OPENMP_FLAGS = -fopenmp
++	OPENMP_FLAGS = -fopenmp
+ else
+ 	OPENMP_FLAGS = -DDISABLE_OPENMP
+ endif
+ CFLAGS += $(OPENMP_FLAGS)
+
++# Add the ADD_*FLAGS last so they take precedence
++LDFLAGS += $(ADD_LDFLAGS)
++CFLAGS += $(ADD_CFLAGS)
++
+ # specify tensor path
+ .PHONY: clean all lint clean_all doxygen rcpplint pypack Rpack Rbuild Rcheck java pylint

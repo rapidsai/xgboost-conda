@@ -1,0 +1,61 @@
+From 829c877759f22c36ed6a743bfca0eb17ebf838dc Mon Sep 17 00:00:00 2001
+From: fis <jm.yuan@outlook.com>
+Date: Wed, 8 May 2019 17:27:15 +0800
+Subject: [PATCH] Enable building with shared NCCL.
+
+---
+ CMakeLists.txt               |  4 ++++
+ cmake/modules/FindNccl.cmake | 14 +++++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7e85a128e..3b8012476 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,9 +25,13 @@ set(NVTX_HEADER_DIR "" CACHE PATH "Path to the stand-alone nvtx header")
+ ## CUDA
+ option(USE_CUDA  "Build with GPU acceleration" OFF)
+ option(USE_NCCL  "Build with NCCL to enable multi-GPU support." OFF)
++option(BUILD_WITH_SHARED_NCCL "Build with shared NCCL library." OFF)
+ option(USE_CUDF  "Build with CUDA DataFrame support" OFF)
+ set(GPU_COMPUTE_VER "" CACHE STRING
+   "Semicolon separated list of compute versions to be built against, e.g. '35;61'")
++if (BUILD_WITH_SHARED_NCCL AND (NOT USE_NCCL))
++  message(SEND_ERROR "Build XGBoost with -DUSE_NCCL=ON to enable BUILD_WITH_SHARED_NCCL.")
++endif (BUILD_WITH_SHARED_NCCL AND (NOT USE_NCCL))
+ ## Sanitizers
+ option(USE_SANITIZER "Use santizer flags" OFF)
+ option(SANITIZER_PATH "Path to sanitizes.")
+diff --git a/cmake/modules/FindNccl.cmake b/cmake/modules/FindNccl.cmake
+index ed1e195a0..643c45f07 100644
+--- a/cmake/modules/FindNccl.cmake
++++ b/cmake/modules/FindNccl.cmake
+@@ -32,8 +32,18 @@
+ #
+ # This module assumes that the user has already called find_package(CUDA)
+ 
++if (NCCL_LIBRARY)
++  # Don't cache NCCL_LIBRARY to enable switching between static and shared.
++  unset(NCCL_LIBRARY CACHE)
++endif()
+ 
+-set(NCCL_LIB_NAME nccl_static)
++if (BUILD_WITH_SHARED_NCCL)
++  # libnccl.so
++  set(NCCL_LIB_NAME nccl)
++else ()
++  # libnccl_static.a
++  set(NCCL_LIB_NAME nccl_static)
++endif (BUILD_WITH_SHARED_NCCL)
+ 
+ find_path(NCCL_INCLUDE_DIR
+   NAMES nccl.h
+@@ -43,6 +53,8 @@ find_library(NCCL_LIBRARY
+   NAMES ${NCCL_LIB_NAME}
+   PATHS $ENV{NCCL_ROOT}/lib/ ${NCCL_ROOT}/lib)
+ 
++message(STATUS "Using nccl library: ${NCCL_LIBRARY}")
++
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(Nccl DEFAULT_MSG
+                                   NCCL_INCLUDE_DIR NCCL_LIBRARY)

@@ -1,9 +1,10 @@
 {% set name = "xgboost" %}
 {% set cudf_version = environ.get('CUDF_VERSION', "0.8.*") %}
+{% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') %}
 
 package:
   name: {{ name|lower }}
-  version: 0.83.dev43
+  version: {{ xgboost_version }}
 
 source:
   # we have to use git urls here to get the submodules needed for the

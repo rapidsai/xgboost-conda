@@ -1,0 +1,80 @@
+diff --git a/Makefile b/Makefile
+index 42d3bfe1..a5171da6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -68,7 +68,7 @@ endif
+ endif
+ 
+ export LDFLAGS= -pthread -lm $(ADD_LDFLAGS) $(DMLC_LDFLAGS) $(PLUGIN_LDFLAGS)
+-export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude $(ADD_CFLAGS) $(PLUGIN_CFLAGS)
++export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude $(PLUGIN_CFLAGS)
+ CFLAGS += -I$(DMLC_CORE)/include -I$(RABIT)/include -I$(GTEST_PATH)/include
+ #java include path
+ export JAVAINCFLAGS = -I${JAVA_HOME}/include -I./java
+@@ -116,6 +116,10 @@ else
+ endif
+ CFLAGS += $(OPENMP_FLAGS)
+ 
++# Add the ADD_*FLAGS last so they take precedence
++LDFLAGS += $(ADD_LDFLAGS)
++CFLAGS += $(ADD_CFLAGS)
++
+ # specify tensor path
+ .PHONY: clean all lint clean_all doxygen rcpplint pypack Rpack Rbuild Rcheck java pylint
+ 
+diff --git a/dmlc-core b/dmlc-core
+index 3943914e..e3377de9 160000
+--- a/dmlc-core
++++ b/dmlc-core
+@@ -1 +1 @@
+-Subproject commit 3943914eed66470bd010df581e29e4dca4f7df6f
++Subproject commit e3377de933d3e069635150fb330ce6cc33b57950
+diff --git a/python-package/setup.py b/python-package/setup.py
+index 30e0d070..07ae22f1 100644
+--- a/python-package/setup.py
++++ b/python-package/setup.py
+@@ -29,7 +29,12 @@ for libfile in libpath['find_lib_path']():
+         continue
+ 
+ print("Install libxgboost from: %s" % LIB_PATH)
+-
++if os.getenv('CONDA_BUILD'):
++    print("Conda-build detected, not installing (xgboost nor) libxgboost from: %s" % LIB_PATH)
++    data_files=('xgboost')
++else:
++    print("Install libxgboost from: %s" % LIB_PATH)
++    data_files=('xgboost', LIB_PATH)
+ # Get dmlc tracker script
+ shutil.copy('../dmlc-core/tracker/dmlc_tracker/tracker.py', 'xgboost/')
+ 
+@@ -50,7 +55,7 @@ setup(name='xgboost',
+       # this will use MANIFEST.in during install where we specify additional files,
+       # this is the golden line
+       include_package_data=True,
+-      data_files=[('xgboost', LIB_PATH)],
++      data_files=[data_files],
+       license='Apache-2.0',
+       classifiers=['License :: OSI Approved :: Apache Software License',
+                    'Development Status :: 5 - Production/Stable',
+diff --git a/python-package/xgboost/libpath.py b/python-package/xgboost/libpath.py
+index a313a1b8..cd7e1dee 100644
+--- a/python-package/xgboost/libpath.py
++++ b/python-package/xgboost/libpath.py
+@@ -23,6 +23,10 @@ def find_lib_path():
+     dll_path = [curr_path, os.path.join(curr_path, '../../lib/'),
+                 os.path.join(curr_path, './lib/'),
+                 os.path.join(sys.prefix, 'xgboost')]
++    if sys.platform == 'win32':
++        dll_path = [os.path.join(sys.prefix, 'Library', 'mingw-w64', 'bin')]
++    else:
++        dll_path = [os.path.join(sys.prefix, 'lib')]
+     if sys.platform == 'win32':
+         if platform.architecture()[0] == '64bit':
+             dll_path.append(os.path.join(curr_path, '../../windows/x64/Release/'))
+diff --git a/rabit b/rabit
+index a429748e..87143deb 160000
+--- a/rabit
++++ b/rabit
+@@ -1 +1 @@
+-Subproject commit a429748e244f67f6f144a697f3aa1b1978705b11
++Subproject commit 87143deb4c0a34302f727ba35497e3380b2cced8

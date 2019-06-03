@@ -13,14 +13,7 @@ source:
   git_tag: cudf-interop
   patches:
     # xgboost patches
-    - 0001-conda-Unbundle-libxgboost.-dll-dylib-so.patch
-    - 0002-Fix-R-package-PKGROOT.patch
-    - 0003-Fix-R-package-mingw-w64-compiler-flags-remove-m64.patch
-    - 0004-Fix-configure-check-for-OpenMP-on-macOS.patch
-    - 0005-Add-ADD_-FLAGS-to-end-of-commandlines.patch  # [not osx]
-    - 0005-Add-ADD_-FLAGS-to-end-of-commandlines-osx.patch  # [osx]
-    # Use shared NCCL library
-    - PR_4447.patch
+    - xgboost.patch
 
 build:
   number: 1

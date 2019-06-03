@@ -22,13 +22,6 @@ index 42d3bfe1..a5171da6 100644
  # specify tensor path
  .PHONY: clean all lint clean_all doxygen rcpplint pypack Rpack Rbuild Rcheck java pylint
  
-diff --git a/dmlc-core b/dmlc-core
-index 3943914e..e3377de9 160000
---- a/dmlc-core
-+++ b/dmlc-core
-@@ -1 +1 @@
--Subproject commit 3943914eed66470bd010df581e29e4dca4f7df6f
-+Subproject commit e3377de933d3e069635150fb330ce6cc33b57950
 diff --git a/python-package/setup.py b/python-package/setup.py
 index 30e0d070..07ae22f1 100644
 --- a/python-package/setup.py
@@ -71,10 +64,3 @@ index a313a1b8..cd7e1dee 100644
      if sys.platform == 'win32':
          if platform.architecture()[0] == '64bit':
              dll_path.append(os.path.join(curr_path, '../../windows/x64/Release/'))
-diff --git a/rabit b/rabit
-index a429748e..87143deb 160000
---- a/rabit
-+++ b/rabit
-@@ -1 +1 @@
--Subproject commit a429748e244f67f6f144a697f3aa1b1978705b11
-+Subproject commit 87143deb4c0a34302f727ba35497e3380b2cced8

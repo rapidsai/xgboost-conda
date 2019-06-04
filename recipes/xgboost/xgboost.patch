@@ -23,10 +23,10 @@ index 42d3bfe1..a5171da6 100644
  .PHONY: clean all lint clean_all doxygen rcpplint pypack Rpack Rbuild Rcheck java pylint
  
 diff --git a/python-package/setup.py b/python-package/setup.py
-index 30e0d070..07ae22f1 100644
+index 30e0d070..de6d3b8a 100644
 --- a/python-package/setup.py
 +++ b/python-package/setup.py
-@@ -29,7 +29,12 @@ for libfile in libpath['find_lib_path']():
+@@ -29,9 +29,14 @@ for libfile in libpath['find_lib_path']():
          continue
  
  print("Install libxgboost from: %s" % LIB_PATH)
@@ -38,8 +38,11 @@ index 30e0d070..07ae22f1 100644
 +    print("Install libxgboost from: %s" % LIB_PATH)
 +    data_files=('xgboost', LIB_PATH)
  # Get dmlc tracker script
- shutil.copy('../dmlc-core/tracker/dmlc_tracker/tracker.py', 'xgboost/')
+-shutil.copy('../dmlc-core/tracker/dmlc_tracker/tracker.py', 'xgboost/')
++shutil.copy(os.path.join(os.environ['SRC_DIR'], 'dmlc-core/tracker/dmlc_tracker/tracker.py'), 'xgboost/tracker.py')
  
+ # Please use setup_pip.py for generating and deploying pip installation
+ # detailed instruction in setup_pip.py
 @@ -50,7 +55,7 @@ setup(name='xgboost',
        # this will use MANIFEST.in during install where we specify additional files,
        # this is the golden line

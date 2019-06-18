@@ -14,7 +14,7 @@ build:
     - libgcc-ng
   run_exports:
     strong:
-      - cudatoolkit {{ version }}|{{ version }}.*
+      - cudatoolkit 9.2|10.0
 
 requirements:
   host:

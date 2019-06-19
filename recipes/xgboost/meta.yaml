@@ -1,7 +1,7 @@
 {% set name = "xgboost" %}
 {% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') %}
 {% set cuda_version = environ.get('CUDA', '9.2') %}
-{% set python_version = environ.get('PYTHON_VERSION', '3.6') %}
+{% set py_version=environ.get('CONDA_PY', 35) %}
 
 package:
   name: {{ name|lower }}
@@ -75,7 +75,7 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: py{{ python_version }}_1
+      string: py{{ py_version }}_1
     requirements:
       build:
         - {{ compiler('c') }}

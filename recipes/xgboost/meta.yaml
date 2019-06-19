@@ -1,7 +1,7 @@
 {% set name = "xgboost" %}
 {% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') %}
 {% set cuda_version = environ.get('CUDA', '9.2') %}
-{% set py_version=environ.get('CONDA_PY', 35) %}
+{% set py_version=environ.get('CONDA_PY', '36') %}
 
 package:
   name: {{ name|lower }}

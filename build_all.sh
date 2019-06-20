@@ -20,7 +20,3 @@ conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults --python=$PYTHON  \
     recipes/xgboost recipes/dask-xgboost --output | xargs \
     anaconda -t ${MY_UPLOAD_KEY} upload -u ${CONDA_USERNAME:-rapidsai} --label xgboost --force
-
-
-    conda build -c /conda/envs/gdf/conda-bld/ -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME}:-nvidia} -c conda-forge -c defaults --python=$PYTHON  \
-        recipes/xgboost recipes/dask-xgboost

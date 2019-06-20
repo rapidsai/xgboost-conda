@@ -21,8 +21,6 @@ build:
   skip: true  # [win or linux32]
   ignore_run_exports:
     - libcudf
-    - nccl
-    - nvcc
 
 requirements:
   build:
@@ -56,6 +54,8 @@ outputs:
     script: install-libxgboost.sh
     build:
       string: cuda{{ cuda_version }}_1
+      ignore_run_exports:
+        - libcudf
     requirements:
       build:
         - {{ compiler('c') }}
@@ -67,17 +67,19 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
-        - libcudf >=0.7 # [xgboost_proc_type == "gpu"]
-        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run:
         - llvm-openmp >=4.0.1  # [osx]
+        - libcudf >=0.7 # [xgboost_proc_type == "gpu"]
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: py{{ py_version }}_1
+      string: cuda{{ cuda_version }}py{{ py_version }}_1
+      ignore_run_exports:
+        - nvcc
     requirements:
       build:
         - {{ compiler('c') }}

@@ -1,5 +1,7 @@
 {% set name = "dask-xgboost" %}
 {% set version = "0.2.0.dev28" %}
+{% set cuda_version = environ.get('CUDA', '9.2') %}
+{% set py_version=environ.get('CONDA_PY', '36') %}
 
 package:
   name: {{ name|lower }}
@@ -11,6 +13,7 @@ source:
 
 build:
   number: 0
+  string: cuda{{ cuda_version }}py{{ py_version }}_0
   script: python setup.py install --single-version-externally-managed --record record.txt
   noarch: python
 
@@ -25,10 +28,6 @@ requirements:
     - xgboost
     - cudf
     - dask-cudf
-
-test:
-  imports:
-    - dask_xgboost
 
 about:
   home: http://github.com/dask/dask-xgboost

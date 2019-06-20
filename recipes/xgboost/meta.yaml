@@ -21,12 +21,14 @@ build:
   skip: true  # [win or linux32]
   ignore_run_exports:
     - libcudf
+    - nccl
+    - nvcc
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
+    - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
     - git
     - cmake
     - make
@@ -114,6 +116,8 @@ outputs:
         - xgboost-proc * {{ xgboost_proc_type }}
 
   - name: xgboost
+    build:
+      string: cuda{{ cuda_version }}py{{ py_version }}_1
     requirements:
       host:
         - python

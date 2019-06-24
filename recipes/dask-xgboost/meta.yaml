@@ -28,6 +28,7 @@ requirements:
     - xgboost
     - cudf
     - dask-cudf
+    - cudatoolkit {{ cuda_version }}
 
 about:
   home: http://github.com/dask/dask-xgboost

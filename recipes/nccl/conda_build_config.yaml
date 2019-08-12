@@ -1,2 +1,4 @@
 nvcc_compiler:
 - nvcc
+nvcc_compiler_version:
+- {{ environ.get('CUDA', '9.2') }}

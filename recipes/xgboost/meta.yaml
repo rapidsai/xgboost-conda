@@ -1,6 +1,5 @@
 {% set name = "xgboost" %}
 {% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') %}
-{% set cuda_version = environ.get('CUDA', '9.2') %}
 {% set py_version=environ.get('CONDA_PY', '36') %}
 
 package:
@@ -26,13 +25,13 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
+    - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
     - git
     - cmake
     - make
     - llvm-openmp >=4.0.1  # [osx]
   host:
-    - cudatoolkit {{ cuda_version }}
+    - cudatoolkit
     - libcudf >=0.7 # [xgboost_proc_type == "gpu"]
     - nccl 2.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
@@ -53,7 +52,6 @@ outputs:
   - name: libxgboost
     script: install-libxgboost.sh
     build:
-      string: cuda{{ cuda_version }}_1
       ignore_run_exports:
         - libcudf
     requirements:
@@ -77,7 +75,6 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_1
       ignore_run_exports:
         - nvcc
     requirements:
@@ -119,7 +116,6 @@ outputs:
 
   - name: xgboost
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_1
     requirements:
       host:
         - python

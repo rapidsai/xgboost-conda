@@ -1,7 +1,6 @@
 {% set name = "nccl" %}
 {% set version = "2.4.6" %}
 {% set revision = "1" %}
-{% set cuda_version = environ.get('CUDA', '9.2') %}
 
 package:
   name: {{ name|lower }}
@@ -16,7 +15,6 @@ source:
 build:
   number: 0
   skip: true  # [not linux]
-  string: cuda{{ cuda_version }}_0
   run_exports:
     # xref: https://github.com/NVIDIA/nccl/issues/218
     - {{ pin_subpackage(name, max_pin="x") }}
@@ -25,10 +23,10 @@ requirements:
   build:
     - {{ compiler("c") }}
     - {{ compiler("cxx") }}
-    - {{ compiler("nvcc") }} {{ cuda_version }}
+    - {{ compiler("nvcc") }}
     - make
   host:
-    - cudatoolkit {{ cuda_version }}
+    - cudatoolkit
 
 test:
   commands:

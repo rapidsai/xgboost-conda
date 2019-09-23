@@ -10,8 +10,8 @@ package:
 source:
   # we have to use git urls here to get the submodules needed for the
   # build
-  git_url: https://github.com/rapidsai/xgboost
-  git_tag: cudf-interop
+  git_url: https://github.com/dmlc/xgboost
+  git_tag: master
   patches:
     # xgboost patches
     - xgboost.patch
@@ -19,8 +19,6 @@ source:
 build:
   number: 1
   skip: true  # [win or linux32]
-  ignore_run_exports:
-    - libcudf
 
 requirements:
   build:
@@ -33,7 +31,7 @@ requirements:
     - llvm-openmp >=4.0.1  # [osx]
   host:
     - cudatoolkit {{ cuda_version }}
-    - libcudf >=0.7 # [xgboost_proc_type == "gpu"]
+    - cudatoolkit {{ cuda_version }}
     - nccl 2.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
 
@@ -54,8 +52,6 @@ outputs:
     script: install-libxgboost.sh
     build:
       string: cuda{{ cuda_version }}_1
-      ignore_run_exports:
-        - libcudf
     requirements:
       build:
         - {{ compiler('c') }}
@@ -69,7 +65,6 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
       run:
         - llvm-openmp >=4.0.1  # [osx]
-        - libcudf >=0.7 # [xgboost_proc_type == "gpu"]
         - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}

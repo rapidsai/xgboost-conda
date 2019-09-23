@@ -1,17 +1,17 @@
 diff --git a/Makefile b/Makefile
-index 42d3bfe1..a5171da6 100644
+index 16d97c0a..80e42f3c 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -68,7 +68,7 @@ endif
+@@ -63,7 +63,7 @@ endif
  endif
  
- export LDFLAGS= -pthread -lm $(ADD_LDFLAGS) $(DMLC_LDFLAGS) $(PLUGIN_LDFLAGS)
--export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude $(ADD_CFLAGS) $(PLUGIN_CFLAGS)
-+export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude $(PLUGIN_CFLAGS)
+ export LDFLAGS= -pthread -lm $(ADD_LDFLAGS) $(DMLC_LDFLAGS)
+-export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude $(ADD_CFLAGS)
++export CFLAGS= -DDMLC_LOG_CUSTOMIZE=1 -std=c++11 -Wall -Wno-unknown-pragmas -Iinclude
  CFLAGS += -I$(DMLC_CORE)/include -I$(RABIT)/include -I$(GTEST_PATH)/include
  #java include path
  export JAVAINCFLAGS = -I${JAVA_HOME}/include -I./java
-@@ -116,6 +116,10 @@ else
+@@ -111,6 +111,10 @@ else
  endif
  CFLAGS += $(OPENMP_FLAGS)
  
@@ -23,27 +23,34 @@ index 42d3bfe1..a5171da6 100644
  .PHONY: clean all lint clean_all doxygen rcpplint pypack Rpack Rbuild Rcheck java pylint
  
 diff --git a/python-package/setup.py b/python-package/setup.py
-index 30e0d070..de6d3b8a 100644
+index a2146f6b..c94b7819 100644
 --- a/python-package/setup.py
 +++ b/python-package/setup.py
-@@ -29,9 +29,14 @@ for libfile in libpath['find_lib_path']():
+@@ -5,6 +5,7 @@ import io
+ import sys
+ import os
+ from setuptools import setup, find_packages
++import shutil
+ 
+ # import subprocess
+ sys.path.insert(0, '.')
+@@ -27,7 +28,14 @@ for libfile in libpath['find_lib_path']():
+     except ValueError:
          continue
  
- print("Install libxgboost from: %s" % LIB_PATH)
--
+-print("Install libxgboost from: %s" % LIB_PATH)
 +if os.getenv('CONDA_BUILD'):
 +    print("Conda-build detected, not installing (xgboost nor) libxgboost from: %s" % LIB_PATH)
 +    data_files=('xgboost')
 +else:
 +    print("Install libxgboost from: %s" % LIB_PATH)
 +    data_files=('xgboost', LIB_PATH)
- # Get dmlc tracker script
--shutil.copy('../dmlc-core/tracker/dmlc_tracker/tracker.py', 'xgboost/')
++
 +shutil.copy(os.path.join(os.environ['SRC_DIR'], 'dmlc-core/tracker/dmlc_tracker/tracker.py'), 'xgboost/tracker.py')
  
  # Please use setup_pip.py for generating and deploying pip installation
  # detailed instruction in setup_pip.py
-@@ -50,7 +55,7 @@ setup(name='xgboost',
+@@ -53,7 +61,7 @@ setup(name='xgboost',
        # this will use MANIFEST.in during install where we specify additional files,
        # this is the golden line
        include_package_data=True,

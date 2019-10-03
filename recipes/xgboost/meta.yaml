@@ -31,7 +31,6 @@ requirements:
     - llvm-openmp >=4.0.1  # [osx]
   host:
     - cudatoolkit {{ cuda_version }}
-    - cudatoolkit {{ cuda_version }}
     - nccl 2.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
 

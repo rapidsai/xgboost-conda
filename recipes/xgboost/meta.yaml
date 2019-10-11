@@ -10,8 +10,8 @@ package:
 source:
   # we have to use git urls here to get the submodules needed for the
   # build
-  git_url: https://github.com/dmlc/xgboost
-  git_tag: master
+  git_url: https://github.com/rapidsai/xgboost
+  git_tag: rapids-0.10-release
   patches:
     # xgboost patches
     - xgboost.patch

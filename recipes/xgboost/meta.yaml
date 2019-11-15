@@ -61,6 +61,7 @@ outputs:
         - make
         - llvm-openmp >=4.0.1  # [osx]
       host:
+        - nccl 2.*
         - llvm-openmp >=4.0.1  # [osx]
       run:
         - llvm-openmp >=4.0.1  # [osx]

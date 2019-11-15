@@ -7,6 +7,8 @@ version=`curl -s https://raw.githubusercontent.com/dmlc/xgboost/master/python-pa
 export XGBOOST_VERSION=${version/-/.}
 
 source activate gdf
+conda build -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults recipes/nccl
+
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults --python=$PYTHON  \
     recipes/xgboost recipes/dask-xgboost
 

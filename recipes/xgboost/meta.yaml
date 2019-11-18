@@ -1,3 +1,5 @@
+{% set name = "xgboost" %}
+{% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') %}
 {% set cuda_version = environ.get('CUDA', '9.2') %}
 {% set py_version=environ.get('CONDA_PY', '36') %}
 
@@ -29,6 +31,7 @@ requirements:
     - llvm-openmp >=4.0.1  # [osx]
   host:
     - cudatoolkit {{ cuda_version }}
+    # - nccl 2.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
 
 

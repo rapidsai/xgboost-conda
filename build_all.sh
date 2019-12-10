@@ -3,8 +3,10 @@
 export PATH=/conda/bin:/usr/local/cuda/bin:$PATH
 export HOME=$WORKSPACE
 
-version=`curl -s https://raw.githubusercontent.com/dmlc/xgboost/master/python-package/xgboost/VERSION`
-export XGBOOST_VERSION=${version/-/.}
+if [ -z "$XGBOOST_VERSION" ]; then
+    echo "XGBOOST_VERSION is not set"
+    exit 1
+fi
 
 source activate gdf
 conda build -c conda-forge -c defaults recipes/nvcc

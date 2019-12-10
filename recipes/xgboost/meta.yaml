@@ -11,7 +11,7 @@ source:
   # we have to use git urls here to get the submodules needed for the
   # build
   git_url: https://github.com/rapidsai/xgboost
-  git_tag: rapids-0.10-release
+  git_tag: rapids-0.11-release
   patches:
     # xgboost patches
     - xgboost.patch
@@ -62,6 +62,7 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run:
         - llvm-openmp >=4.0.1  # [osx]
         - nccl 2.*             # [xgboost_proc_type == "gpu"]
@@ -105,6 +106,7 @@ outputs:
     requirements:
       host:
         - python
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
@@ -117,6 +119,7 @@ outputs:
     requirements:
       host:
         - python
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}

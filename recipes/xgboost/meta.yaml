@@ -11,7 +11,7 @@ source:
   # we have to use git urls here to get the submodules needed for the
   # build
   git_url: https://github.com/rapidsai/xgboost
-  git_tag: rapids-0.12-release
+  git_tag: rapids-0.12-hotfix
   patches:
     # xgboost patches
     - xgboost.patch

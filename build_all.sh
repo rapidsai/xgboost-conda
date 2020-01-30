@@ -8,7 +8,14 @@ if [ -z "$XGBOOST_VERSION" ]; then
     exit 1
 fi
 
+# install gpuci tools
+curl -s https://raw.githubusercontent.com/rapidsai/gpuci-mgmt/master/gpuci-tools.sh | bash
+
 source activate gdf
+
+# load gpuci tools
+source ~/.bashrc
+
 #conda build -c conda-forge -c defaults recipes/nvcc
 #conda build -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults recipes/nccl
 
@@ -16,5 +23,8 @@ conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -
     recipes/xgboost recipes/dask-xgboost
 
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults --python=$PYTHON  \
-    recipes/xgboost recipes/dask-xgboost --output | xargs \
-    anaconda -t ${MY_UPLOAD_KEY} upload -u ${CONDA_USERNAME:-rapidsai} --label main --force
+    recipes/xgboost recipes/dask-xgboost --output > /tmp/conda-output
+
+while read line ; do
+    gpuci_retry anaconda -t ${MY_UPLOAD_KEY} upload -u ${CONDA_USERNAME:-rapidsai} --label main --force $line
+done < /tmp/conda-output

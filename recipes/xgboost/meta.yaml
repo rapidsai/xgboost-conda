@@ -62,10 +62,10 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.4.1.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.4.6.1.*             # [xgboost_proc_type == "gpu"]
       run:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.4.1.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.4.6.1.*            # [xgboost_proc_type == "gpu"]
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
@@ -106,7 +106,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.4.1.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.4.6.1.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
@@ -119,7 +119,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.4.1.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.4.6.1.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}

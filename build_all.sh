@@ -23,8 +23,8 @@ conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -
     recipes/xgboost recipes/dask-xgboost
 
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults --python=$PYTHON  \
-    recipes/xgboost recipes/dask-xgboost --output > /tmp/conda-output
+    recipes/xgboost recipes/dask-xgboost --output > $WORKSPACE/conda-output
 
 while read line ; do
     gpuci_retry anaconda -t ${MY_UPLOAD_KEY} upload -u ${CONDA_USERNAME:-rapidsai} --label main --force $line
-done < /tmp/conda-output
+done < $WORKSPACE/conda-output

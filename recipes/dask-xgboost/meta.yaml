@@ -13,7 +13,7 @@ source:
 
 build:
   number: 0
-  string: cuda{{ cuda_version }}py{{ py_version }}_0
+  string: cuda{{ cuda_version }}_py{{ py_version }}_0
   script: python setup.py install --single-version-externally-managed --record record.txt
   noarch: python
 

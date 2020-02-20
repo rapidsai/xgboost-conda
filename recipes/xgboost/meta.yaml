@@ -2,6 +2,8 @@
 {% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') %}
 {% set cuda_version = environ.get('CUDA', '9.2') %}
 {% set py_version=environ.get('CONDA_PY', '36') %}
+{% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost')}
+{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master')}
 
 package:
   name: {{ name|lower }}
@@ -10,18 +12,14 @@ package:
 source:
   # we have to use git urls here to get the submodules needed for the
   # build
-  git_url: https://github.com/rapidsai/xgboost
-  git_tag: rapids-0.12-hotfix
+  git_url: https://github.com/{{ xgboost_repo }}
+  git_tag: {{ xgboost_branch }}
   patches:
-    # xgboost patches
     - xgboost.patch
 
 build:
   number: 1
   skip: true  # [win or linux32]
-  script_env:
-    - XGBOOST_VERSION
-    - CUDA
 
 requirements:
   build:
@@ -33,8 +31,8 @@ requirements:
     - make
     - llvm-openmp >=4.0.1  # [osx]
   host:
-    - cudatoolkit {{ cuda_version }}.*
-    - nccl 2.4.*           # [xgboost_proc_type == "gpu"]
+    - cudatoolkit {{ cuda_version }}
+    - nccl 2.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
 
 
@@ -58,17 +56,17 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
         - git
         - cmake
         - make
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.4.*           # [xgboost_proc_type == "gpu"]
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.4.*           # [xgboost_proc_type == "gpu"]
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
@@ -82,7 +80,7 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
@@ -97,7 +95,7 @@ outputs:
         - numpy
         - scipy
         - scikit-learn
-        - pandas 0.25.*
+        - pandas
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
     test:
@@ -109,7 +107,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.4.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
@@ -122,7 +120,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.4.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}

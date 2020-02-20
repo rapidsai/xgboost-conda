@@ -33,5 +33,6 @@ cmake \
       -D USE_CUDF:BOOL=ON \
       -D CUDF_ROOT:PATH="${PREFIX}" \
       -D CUDF_INCLUDE_DIR:PATH="${PREFIX}/include" \
+      -D GPU_COMPUTE_VER:STRING="60;61;70" \
       "${SRC_DIR}"
 make -j${CPU_COUNT} VERBOSE=1

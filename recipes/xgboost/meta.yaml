@@ -1,6 +1,6 @@
 {% set name = "xgboost" %}
 {% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') + environ.get('VERSION_SUFFIX', '') %}
-{% set cuda_version = environ.get('CUDA', '9.2') %}
+{% set cuda_version = environ.get('CUDA', '10.0') %}
 {% set py_version=environ.get('CONDA_PY', '36') %}
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
 {% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master') %}
@@ -15,7 +15,7 @@ source:
   git_url: https://github.com/{{ xgboost_repo }}
   git_tag: {{ xgboost_branch }}
   patches:
-    - xgboost.patch
+    - xgboost_master.patch
 
 build:
   number: 1

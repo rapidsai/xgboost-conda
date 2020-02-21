@@ -1,0 +1,32 @@
+diff --git a/python-package/setup.py b/python-package/setup.py
+index c2e6fd994..14aa3d543 100644
+--- a/python-package/setup.py
++++ b/python-package/setup.py
+@@ -280,12 +280,6 @@ if __name__ == '__main__':
+               'scipy',
+           ],
+           ext_modules=[CMakeExtension('libxgboost')],
+-          cmdclass={
+-              'build_ext': BuildExt,
+-              'sdist': Sdist,
+-              'install_lib': InstallLib,
+-              'install': Install
+-          },
+           extras_require={
+               'pandas': ['pandas'],
+               'scikit-learn': ['scikit-learn'],
+diff --git a/python-package/xgboost/libpath.py b/python-package/xgboost/libpath.py
+index 65f7403e6..4d044cf87 100644
+--- a/python-package/xgboost/libpath.py
++++ b/python-package/xgboost/libpath.py
+@@ -25,6 +25,10 @@ def find_lib_path():
+         # editable installation, no copying is performed.
+         os.path.join(curr_path, os.path.pardir, os.path.pardir, 'lib'),
+     ]
++    if sys.platform == 'win32':
++        dll_path = [os.path.join(sys.prefix, 'Library', 'mingw-w64', 'bin')]
++    else:
++        dll_path = [os.path.join(sys.prefix, 'lib')]
+     if sys.platform == 'win32':
+         if platform.architecture()[0] == '64bit':
+             dll_path.append(

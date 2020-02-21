@@ -1,9 +1,9 @@
 {% set name = "xgboost" %}
-{% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') %}
+{% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') + environ.get('VERSION_SUFFIX', '') %}
 {% set cuda_version = environ.get('CUDA', '9.2') %}
 {% set py_version=environ.get('CONDA_PY', '36') %}
-{% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost')}
-{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master')}
+{% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
+{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master') %}
 
 package:
   name: {{ name|lower }}
@@ -20,6 +20,11 @@ source:
 build:
   number: 1
   skip: true  # [win or linux32]
+  script_env:
+    - XGBOOST_VERSION
+    - XGBOOST_REPO
+    - XGBOOST_BRANCH
+    - VERSION_SUFFIX
 
 requirements:
   build:

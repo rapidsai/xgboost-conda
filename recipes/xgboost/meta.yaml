@@ -61,7 +61,7 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
         - git
         - cmake
         - make
@@ -85,7 +85,7 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }}         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}

@@ -25,19 +25,20 @@ build:
     - XGBOOST_REPO
     - XGBOOST_BRANCH
     - VERSION_SUFFIX
+    - CUDA
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
+    - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
     - git
     - cmake
     - make
     - llvm-openmp >=4.0.1  # [osx]
   host:
     - cudatoolkit {{ cuda_version }}
-    - nccl 2.*             # [xgboost_proc_type == "gpu"]
+    - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
 
 
@@ -61,17 +62,17 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
         - git
         - cmake
         - make
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.5*             # [xgboost_proc_type == "gpu"]
       run:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
@@ -85,7 +86,7 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }} {{ cuda_version }}         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
@@ -100,7 +101,7 @@ outputs:
         - numpy
         - scipy
         - scikit-learn
-        - pandas
+        - pandas 0.25.*
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
     test:
@@ -112,7 +113,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
@@ -125,7 +126,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}

@@ -126,6 +126,7 @@ outputs:
     requirements:
       host:
         - python
+        - cudatoolkit {{ cuda_version }}
         - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
       run:
         - python

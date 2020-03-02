@@ -69,7 +69,7 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.5*             # [xgboost_proc_type == "gpu"]
+        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
       run:
         - llvm-openmp >=4.0.1  # [osx]
         - nccl 2.5.*             # [xgboost_proc_type == "gpu"]

@@ -4,6 +4,7 @@
 {% set py_version=environ.get('CONDA_PY', '36') %}
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
 {% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master') %}
+{% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
 
 package:
   name: {{ name|lower }}
@@ -24,6 +25,7 @@ build:
     - XGBOOST_VERSION
     - XGBOOST_REPO
     - XGBOOST_BRANCH
+    - XGBOOST_BUILD_NUMBER
     - VERSION_SUFFIX
     - CUDA
 
@@ -57,7 +59,7 @@ outputs:
   - name: libxgboost
     script: install-libxgboost.sh
     build:
-      string: cuda{{ cuda_version }}_1
+      string: cuda{{ cuda_version }}_{{ build_number }}
     requirements:
       build:
         - {{ compiler('c') }}
@@ -79,7 +81,7 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_1
+      string: cuda{{ cuda_version }}py{{ py_version }}_{{ build_number }}
       ignore_run_exports:
         - nvcc
     requirements:
@@ -122,7 +124,7 @@ outputs:
 
   - name: xgboost
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_1
+      string: cuda{{ cuda_version }}py{{ py_version }}_{{ build_number }}
     requirements:
       host:
         - python

@@ -16,7 +16,7 @@ source:
   git_url: https://github.com/{{ xgboost_repo }}
   git_tag: {{ xgboost_branch }}
   patches:
-    - xgboost_master.patch
+    - xgboost.patch
 
 build:
   number: 1

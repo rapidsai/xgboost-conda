@@ -16,13 +16,15 @@ build:
   string: cuda{{ cuda_version }}_py{{ py_version }}_0
   script: python setup.py install --single-version-externally-managed --record record.txt
   noarch: python
+  script_env:
+    - CUDA
 
 requirements:
   build:
-    - python >=3
+    - python
     - setuptools
   run:
-    - python >=3
+    - python
     - dask >=0.14.0
     - distributed >=1.16.0
     - xgboost

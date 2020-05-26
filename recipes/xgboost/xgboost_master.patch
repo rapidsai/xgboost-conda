@@ -30,3 +30,15 @@ index 65f7403e6..4d044cf87 100644
      if sys.platform == 'win32':
          if platform.architecture()[0] == '64bit':
              dll_path.append(
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 9a6060316..90dfb9e99 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -14,7 +14,6 @@ if (USE_CUDA)
+     $<$<COMPILE_LANGUAGE:CUDA>:--expt-extended-lambda>
+     $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr>
+     $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>
+-    $<$<AND:$<NOT:$<CXX_COMPILER_ID:MSVC>>,$<COMPILE_LANGUAGE:CUDA>>:--std=c++11>
+     $<$<COMPILE_LANGUAGE:CUDA>:${GEN_CODE}>)
+
+   if (USE_NCCL)

@@ -9,7 +9,7 @@ if [ -z "$XGBOOST_VERSION" ]; then
 fi
 
 # install gpuci tools
-curl -s https://raw.githubusercontent.com/rapidsai/gpuci-mgmt/master/gpuci-tools.sh | bash
+conda install -y -c gpuci gpuci-tools
 
 source activate gdf
 

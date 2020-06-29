@@ -103,7 +103,7 @@ outputs:
         - numpy
         - scipy
         - scikit-learn
-        - pandas 0.25.*
+        - pandas >=0.25
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
     test:

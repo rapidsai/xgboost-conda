@@ -3,7 +3,7 @@
 {% set cuda_version = environ.get('CUDA', '10.0') %}
 {% set py_version=environ.get('CONDA_PY', '36') %}
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
-{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master') %}
+{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'main') %}
 {% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
 
 package:

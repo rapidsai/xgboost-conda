@@ -11,8 +11,6 @@ fi
 # install gpuci tools
 conda install -y -c gpuci gpuci-tools
 
-source activate gdf
-
 #conda build -c conda-forge -c defaults recipes/nvcc
 #conda build -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults recipes/nccl
 

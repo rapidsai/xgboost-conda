@@ -11,6 +11,9 @@ fi
 # install gpuci tools
 conda install -y -c gpuci gpuci-tools
 
+# install build tools
+conda install -y -c conda-forge conda-build conda-verify anaconda-client ripgrep
+
 #conda build -c conda-forge -c defaults recipes/nvcc
 #conda build -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults recipes/nccl
 

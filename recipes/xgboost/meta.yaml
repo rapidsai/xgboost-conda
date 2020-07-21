@@ -35,12 +35,12 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
     - git
-    - cmake =3.14
+    - cmake =3.14.5
     - make
     - llvm-openmp >=4.0.1  # [osx]
   host:
     - cudatoolkit {{ cuda_version }}.*
-    - nccl 2.5.*           # [xgboost_proc_type == "gpu"]
+    - nccl >=2.5.*           # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
 
 

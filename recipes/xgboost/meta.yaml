@@ -19,7 +19,7 @@ source:
     - xgboost_master.patch
 
 build:
-  number: 1
+  number: {{ GIT_DESCRIBE_NUMBER }}
   skip: true  # [win or linux32]
   script_env:
     - XGBOOST_VERSION
@@ -59,7 +59,7 @@ outputs:
   - name: libxgboost
     script: install-libxgboost.sh
     build:
-      string: cuda{{ cuda_version }}_{{ build_number }}
+      string: cuda{{ cuda_version }}_{{ GIT_DESCRIBE_NUMBER }}
     requirements:
       build:
         - {{ compiler('c') }}
@@ -81,7 +81,7 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_{{ build_number }}
+      string: cuda{{ cuda_version }}py{{ py_version }}_{{ GIT_DESCRIBE_NUMBER }}
       ignore_run_exports:
         - nvcc
     requirements:
@@ -124,7 +124,7 @@ outputs:
 
   - name: xgboost
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_{{ build_number }}
+      string: cuda{{ cuda_version }}py{{ py_version }}_{{ GIT_DESCRIBE_NUMBER }}
     requirements:
       host:
         - python

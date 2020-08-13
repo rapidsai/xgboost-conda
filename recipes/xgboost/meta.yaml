@@ -20,7 +20,7 @@ source:
     - xgboost_master.patch
 
 build:
-  number: 1
+  number: {{ GIT_DESCRIBE_NUMBER }}
   skip: true  # [win or linux32]
   script_env:
     - XGBOOST_VERSION
@@ -42,7 +42,7 @@ requirements:
     - llvm-openmp >=4.0.1  # [osx]
   host:
     - cudatoolkit {{ cuda_version }}
-    - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+    - nccl >=2.5.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
     - rmm {{ rapids_version }}.*
 
@@ -62,7 +62,7 @@ outputs:
   - name: libxgboost
     script: install-libxgboost.sh
     build:
-      string: cuda{{ cuda_version }}_{{ build_number }}
+      string: cuda{{ cuda_version }}_{{ GIT_DESCRIBE_NUMBER }}
     requirements:
       build:
         - {{ compiler('c') }}
@@ -74,11 +74,11 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5.*             # [xgboost_proc_type == "gpu"]
         - librmm {{ rapids_version }}.*
       run:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5.*             # [xgboost_proc_type == "gpu"]
         - librmm {{ rapids_version }}.*
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
@@ -86,7 +86,7 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_{{ build_number }}
+      string: cuda{{ cuda_version }}py{{ py_version }}_{{ GIT_DESCRIBE_NUMBER }}
       ignore_run_exports:
         - nvcc
     requirements:
@@ -122,7 +122,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5.*             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
@@ -131,12 +131,12 @@ outputs:
 
   - name: xgboost
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_{{ build_number }}
+      string: cuda{{ cuda_version }}py{{ py_version }}_{{ GIT_DESCRIBE_NUMBER }}
     requirements:
       host:
         - python
         - cudatoolkit {{ cuda_version }}
-        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5.*             # [xgboost_proc_type == "gpu"]
         - rmm {{ rapids_version }}.*
       run:
         - python

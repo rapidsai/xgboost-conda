@@ -5,6 +5,7 @@
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
 {% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master') %}
 {% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
+{% set rapids_version = environ.get('RAPIDS_VERSION', '0.15') %}
 
 package:
   name: {{ name|lower }}
@@ -28,6 +29,7 @@ build:
     - XGBOOST_BUILD_NUMBER
     - VERSION_SUFFIX
     - CUDA
+    - RAPIDS_VERSION
 
 requirements:
   build:
@@ -42,6 +44,7 @@ requirements:
     - cudatoolkit {{ cuda_version }}
     - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
+    - rmm {{ rapids_version }}.*
 
 
 outputs:
@@ -72,9 +75,11 @@ outputs:
       host:
         - llvm-openmp >=4.0.1  # [osx]
         - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - librmm {{ rapids_version }}.*
       run:
         - llvm-openmp >=4.0.1  # [osx]
         - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - librmm {{ rapids_version }}.*
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
@@ -96,6 +101,7 @@ outputs:
         - setuptools
         - pip
         - llvm-openmp >=4.0.1  # [osx]
+        - rmm {{ rapids_version }}.*
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - llvm-openmp >=4.0.1  # [osx]
@@ -104,6 +110,7 @@ outputs:
         - scipy
         - scikit-learn
         - pandas >=0.25
+        - rmm {{ rapids_version }}.*
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
     test:
@@ -130,6 +137,7 @@ outputs:
         - python
         - cudatoolkit {{ cuda_version }}
         - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - rmm {{ rapids_version }}.*
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}

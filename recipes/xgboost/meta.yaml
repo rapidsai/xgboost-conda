@@ -5,7 +5,7 @@
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
 {% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'master') %}
 {% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
-{% set rapids_version = environ.get('RAPIDS_VERSION', '0.15') %}
+{% set rapids_version = environ.get('RAPIDS_VER', '0.15') %}
 
 package:
   name: {{ name|lower }}

@@ -1,4 +1,4 @@
-# Taken from: https://github.com/dmlc/xgboost/blob/master/R-package/vignettes/xgboostPresentation.Rmd
+# Taken from: https://github.com/dmlc/xgboost/blob/main/R-package/vignettes/xgboostPresentation.Rmd
 
 require(xgboost)
 data(agaricus.train, package='xgboost')

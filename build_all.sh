@@ -9,7 +9,7 @@ if [ -z "$XGBOOST_VERSION" ]; then
 fi
 
 # install gpuci tools
-conda install -y -c gpuci gpuci-tools
+curl -s https://raw.githubusercontent.com/rapidsai/gpuci-mgmt/main/gpuci-tools.sh | bash
 
 source activate gdf
 
@@ -20,7 +20,7 @@ source ~/.bashrc
 #conda build -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults recipes/nccl
 
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults --python=$PYTHON  \
-    recipes/xgboost recipes/dask-xgboost
+    recipes/xgboost
 
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults --python=$PYTHON  \
     recipes/xgboost --output > $WORKSPACE/conda-output

@@ -22,6 +22,9 @@ build:
   number: 1
   skip: true  # [win or linux32]
   script_env:
+    - CC
+    - CXX
+    - CUDAHOSTCXX
     - XGBOOST_VERSION
     - XGBOOST_REPO
     - XGBOOST_BRANCH
@@ -39,8 +42,8 @@ requirements:
     - make
     - llvm-openmp >=4.0.1  # [osx]
   host:
-    - cudatoolkit {{ cuda_version }}.*
-    - nccl 2.5.*           # [xgboost_proc_type == "gpu"]
+    - cudatoolkit {{ cuda_version }}
+    - nccl >=2.5             # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
 
 
@@ -71,10 +74,10 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.5.*           # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5             # [xgboost_proc_type == "gpu"]
       run:
         - llvm-openmp >=4.0.1  # [osx]
-        - nccl 2.5.*           # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5             # [xgboost_proc_type == "gpu"]
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
@@ -115,7 +118,7 @@ outputs:
     requirements:
       host:
         - python
-        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
@@ -128,8 +131,8 @@ outputs:
     requirements:
       host:
         - python
-        - cudatoolkit {{ cuda_version }}.*
-        - nccl 2.5.*             # [xgboost_proc_type == "gpu"]
+        - cudatoolkit {{ cuda_version }}
+        - nccl >=2.5             # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}

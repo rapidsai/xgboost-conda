@@ -34,5 +34,7 @@ cmake \
       -D CUDF_ROOT:PATH="${PREFIX}" \
       -D CUDF_INCLUDE_DIR:PATH="${PREFIX}/include" \
       -D GPU_COMPUTE_VER:STRING="60;61;70" \
+      -D PLUGIN_RMM=ON \
+      -D RMM_ROOT="${PREFIX}" \
       "${SRC_DIR}"
 make -j${CPU_COUNT} VERBOSE=1

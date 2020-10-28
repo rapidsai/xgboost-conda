@@ -40,7 +40,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
     - git
-    - cmake =3.14
+    - cmake
     - make
     - llvm-openmp >=4.0.1  # [osx]
     - librmm {{ rapids_version }}
@@ -73,7 +73,7 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
         - git
-        - cmake =3.14
+        - cmake
         - make
         - llvm-openmp >=4.0.1  # [osx]
       host:

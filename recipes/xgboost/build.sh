@@ -14,6 +14,14 @@ fi
 export CUDF_ROOT="${PREFIX}"
 export NCCL_ROOT="${PREFIX}"
 
+CUDA_MAJOR=${CUDA%.*}
+
+GPU_COMPUTE="60;70;75"
+if [[ "$CUDA_MAJOR" -ge 11 ]]; then
+    GPU_COMPUTE="$GPU_COMPUTE;80"
+fi
+echo "GPU_COMPUTE=$GPU_COMPUTE"
+
 cmake \
       -G "Unix Makefiles" \
       -D CMAKE_BUILD_TYPE:STRING="Release" \
@@ -33,7 +41,7 @@ cmake \
       -D USE_CUDF:BOOL=ON \
       -D CUDF_ROOT:PATH="${PREFIX}" \
       -D CUDF_INCLUDE_DIR:PATH="${PREFIX}/include" \
-      -D GPU_COMPUTE_VER:STRING="60;70;75;80" \
+      -D GPU_COMPUTE_VER:STRING="$GPU_COMPUTE" \
       -D PLUGIN_RMM=ON \
       -D RMM_ROOT="${PREFIX}" \
       "${SRC_DIR}"

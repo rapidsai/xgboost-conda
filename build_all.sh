@@ -11,7 +11,8 @@ fi
 # install gpuci tools
 curl -s https://raw.githubusercontent.com/rapidsai/gpuci-mgmt/main/gpuci-tools.sh | bash
 
-source activate gdf
+. /opt/conda/etc/profile.d/conda.sh
+conda activate rapids
 
 # load gpuci tools
 source ~/.bashrc

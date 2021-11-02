@@ -20,7 +20,7 @@ source:
     - xgboost_master.patch
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win or linux32]
   script_env:
     - CC

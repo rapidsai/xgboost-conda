@@ -14,11 +14,16 @@ fi
 export CUDF_ROOT="${PREFIX}"
 export NCCL_ROOT="${PREFIX}"
 
-CUDA_MAJOR=${CUDA%.*}
+CUDA_MAJOR=$(echo $CUDA | cut -f 1 -d.)
+CUDA_MINOR=$(echo $CUDA | cut -f 2 -d.)
 
+BUILD_WITH_CUDA_CUB="OFF"
 GPU_COMPUTE="60;70;75"
 if [[ "$CUDA_MAJOR" -ge 11 ]]; then
     GPU_COMPUTE="$GPU_COMPUTE;80"
+    if [[ "$CUDA_MINOR" -ge 4 ]]; then
+        BUILD_WITH_CUDA_CUB="ON"
+    fi
 fi
 echo "GPU_COMPUTE=$GPU_COMPUTE"
 
@@ -28,6 +33,7 @@ cmake \
       -D CMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON \
       -D CMAKE_INSTALL_PREFIX:PATH="${PREFIX}" \
       -D USE_CUDA:BOOL=ON \
+      -D BUILD_WITH_CUDA_CUB:BOOL="${BUILD_WITH_CUDA_CUB}" \
       -D CMAKE_CUDA_COMPILER:PATH="${CUDA_HOME}/bin/nvcc" \
       -D CMAKE_CUDA_HOST_COMPILER:PATH="${CXX}" \
       -D CUDA_USE_STATIC_CUDA_RUNTIME:BOOL=OFF \

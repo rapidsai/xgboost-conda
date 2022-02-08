@@ -67,7 +67,7 @@ outputs:
   - name: libxgboost
     script: install-libxgboost.sh
     build:
-      string: cuda{{ cuda_version }}_{{ build_number }}
+      string: cuda_{{ cuda_major }}_{{ build_number }}
     requirements:
       build:
         - {{ compiler('c') }}
@@ -91,7 +91,7 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: cuda{{ cuda_version }}py{{ py_version }}_{{ build_number }}
+      string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
       ignore_run_exports:
         - nvcc
     requirements:
@@ -136,7 +136,7 @@ outputs:
 
   - name: xgboost
     build:
-      string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ GIT_DESCRIBE_HASH }}_{{ GIT_DESCRIBE_NUMBER }}
+      string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
     requirements:
       host:
         - python
@@ -145,6 +145,7 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
+        - {{ pin_compatible('cudatoolkit', max_pin='x', min_pin='x') }}
 
 about:
   home: https://github.com/dmlc/xgboost

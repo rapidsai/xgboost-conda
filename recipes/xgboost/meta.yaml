@@ -34,6 +34,9 @@ build:
     - VERSION_SUFFIX
     - CUDA
     - RAPIDS_VER
+  ignore_run_exports_from:
+    - nvcc_linux-64 # [linux64]
+    - nvcc_linux-aarch64 # [aarch64]
 
 requirements:
   build:
@@ -58,6 +61,9 @@ outputs:
     build:
       number: 0
       string: "{{ xgboost_proc_type }}"
+      ignore_run_exports_from:
+        - nvcc_linux-64 # [linux64]
+        - nvcc_linux-aarch64 # [aarch64]
     about:
       home: https://github.com/conda-forge/xgboost-feedstock
       license: BSD-3-Clause
@@ -68,6 +74,9 @@ outputs:
     script: install-libxgboost.sh
     build:
       string: cuda_{{ cuda_major }}_{{ build_number }}
+      ignore_run_exports_from:
+        - nvcc_linux-64 # [linux64]
+        - nvcc_linux-aarch64 # [aarch64]
     requirements:
       build:
         - {{ compiler('c') }}
@@ -85,6 +94,7 @@ outputs:
         - llvm-openmp >=4.0.1  # [osx]
         - nccl >=2.5             # [xgboost_proc_type == "gpu"]
         - librmm {{ rapids_version }}
+        - {{ pin_compatible('cudatoolkit', max_pin='x', min_pin='x') }}
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
@@ -94,6 +104,9 @@ outputs:
       string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
       ignore_run_exports:
         - nvcc
+      ignore_run_exports_from:
+        - nvcc_linux-64 # [linux64]
+        - nvcc_linux-aarch64 # [aarch64]
     requirements:
       build:
         - {{ compiler('c') }}
@@ -116,6 +129,7 @@ outputs:
         - scikit-learn
         - pandas >=0.25
         - rmm {{ rapids_version }}
+        - {{ pin_compatible('cudatoolkit', max_pin='x', min_pin='x') }}
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
     test:
@@ -124,6 +138,10 @@ outputs:
         - xgboost
 
   - name: py-xgboost
+    build:
+      ignore_run_exports_from:
+        - nvcc_linux-64 # [linux64]
+        - nvcc_linux-aarch64 # [aarch64]
     requirements:
       host:
         - python
@@ -131,12 +149,16 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
+        - {{ pin_compatible('cudatoolkit', max_pin='x', min_pin='x') }}
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
   - name: xgboost
     build:
       string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
+      ignore_run_exports_from:
+        - nvcc_linux-64 # [linux64]
+        - nvcc_linux-aarch64 # [aarch64]
     requirements:
       host:
         - python

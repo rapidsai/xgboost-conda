@@ -9,7 +9,7 @@ if [ -z "$XGBOOST_VERSION" ]; then
 fi
 
 # install gpuci tools
-curl -s https://raw.githubusercontent.com/rapidsai/gpuci-mgmt/main/gpuci-tools.sh | bash
+curl -s https://raw.githubusercontent.com/rapidsai/gpuci-tools/main/install.sh | bash
 
 . /opt/conda/etc/profile.d/conda.sh
 conda activate rapids

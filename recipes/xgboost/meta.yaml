@@ -24,9 +24,6 @@ build:
   number: 2
   skip: true  # [win or linux32]
   script_env:
-    - CC
-    - CXX
-    - CUDAHOSTCXX
     - XGBOOST_VERSION
     - XGBOOST_REPO
     - XGBOOST_BRANCH

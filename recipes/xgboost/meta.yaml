@@ -3,8 +3,8 @@
 {% set cuda_version='.'.join(environ.get('CUDA', '11.5').split('.')[:2]) %}
 {% set cuda_major=cuda_version.split('.')[0] %}
 {% set py_version=environ.get('CONDA_PY', '36') %}
-{% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
-{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'main') %}
+{% set xgboost_repo = environ.get('XGBOOST_REPO', 'trivialfis/xgboost') %}
+{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'deterministic-rank-assignment') %}
 {% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
 {% set rapids_version = environ.get('RAPIDS_VER', '0.16') %}
 

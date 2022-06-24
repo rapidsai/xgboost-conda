@@ -17,9 +17,6 @@ conda activate rapids
 # load gpuci tools
 source ~/.bashrc
 
-#conda build -c conda-forge -c defaults recipes/nvcc
-#conda build -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults recipes/nccl
-
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \
     recipes/xgboost
 

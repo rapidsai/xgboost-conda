@@ -6,7 +6,7 @@
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'trivialfis/xgboost') %}
 {% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'deterministic-rank-assignment') %}
 {% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
-{% set rapids_version = environ.get('RAPIDS_VER', '0.16') %}
+{% set rapids_version = environ.get('RAPIDS_VER', '22.06') %}
 
 package:
   name: {{ name|lower }}

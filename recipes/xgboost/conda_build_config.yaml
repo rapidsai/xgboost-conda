@@ -3,8 +3,6 @@ xgboost_proc_type:
   - gpu
 cuda_compiler:
   - nvcc
-cuda_compiler_version:
-  - 11.5
 c_compiler:
   - gcc                        # [linux]
 c_compiler_version:            # [unix]

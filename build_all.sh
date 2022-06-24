@@ -23,7 +23,7 @@ source ~/.bashrc
 conda mambabuild -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \
     recipes/xgboost
 
-conda mambabuild -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \
+conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \
     recipes/xgboost --output > $WORKSPACE/conda-output
 
 while read line ; do

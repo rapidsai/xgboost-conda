@@ -13,19 +13,20 @@ fi
 source build_all.sh                        
 '''
 
-def getImg(py_ver, arch) {
+def getImg(py_ver, arch, cuda_ver) {
   String img = "rapidsai"
-  String cuda_ver = config.cuda_ver
+  String os="centos7"
 
   if (arch == "arm64") {
     img += "-driver"
+    os = "ubuntu18.04"
   }
 
-  if (config.arch == "arm64") {
+  if (arch == "arm64") {
     img += "-arm64"
   }
 
-  return "gpuci/${img}:22.08-cuda${cuda_ver}-devel-centos7-py${py_ver}"
+  return "gpuci/${img}:22.08-cuda${cuda_ver}-devel-${os}-py${py_ver}"
 }
 
 pipeline {
@@ -67,7 +68,7 @@ pipeline {
                 }
             }
             stages {
-                stage('Build PR') {
+                stage("Build PR") {
                     when { environment name: 'BUILD_TYPE', value: 'pull-request' }
                     agent {
                         label "cpu4-${ARCH}"
@@ -79,18 +80,20 @@ pipeline {
 
                     steps {
                         script {
-                            def image = getImg("$PYTHON", "$ARCH")
-                            docker.image("${image}").inside("""
-                            --pull=always
-                            -e CUDA=${CUDA}
-                            -e PY_VER=${PYTHON}
-                            """) {
-                                sh "${buildString}"
+                            stage("Build PR: $CUDA - $PYTHON - $ARCH") {
+                                def image = getImg("$PYTHON", "$ARCH", "$CUDA")
+                                docker.image("${image}").inside("""
+                                --pull=always
+                                -e CUDA=${CUDA}
+                                -e PY_VER=${PYTHON}
+                                """) {
+                                    sh "${buildString}"
+                                }
                             }
                         }
                     }
                 }
-                stage('Build Branch') {
+                stage("Build Branch") {
                     when { environment name: 'BUILD_TYPE', value: 'nightly' }
                     agent {
                         label "cpu4-${ARCH}"
@@ -105,13 +108,15 @@ pipeline {
 
                     steps {
                         script {
-                            def image = getImg("$PYTHON", "$ARCH")
-                            docker.image("${image}").inside("""
-                            --pull=always
-                            -e CUDA=${CUDA}
-                            -e PY_VER=${PYTHON}
-                            """) {
-                                sh "${buildString}"
+                            stage("Build Branch: $CUDA - $PYTHON - $ARCH") {
+                                def image = getImg("$PYTHON", "$ARCH", "$CUDA")
+                                docker.image("${image}").inside("""
+                                --pull=always
+                                -e CUDA=${CUDA}
+                                -e PY_VER=${PYTHON}
+                                """) {
+                                    sh "${buildString}"
+                                }
                             }
                         }
                     }

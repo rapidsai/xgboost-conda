@@ -13,6 +13,21 @@ fi
 source build_all.sh                        
 '''
 
+def getImg(py_ver, arch) {
+  String img = "rapidsai"
+  String cuda_ver = config.cuda_ver
+
+  if (arch == "arm64") {
+    img += "-driver"
+  }
+
+  if (config.arch == "arm64") {
+    img += "-arm64"
+  }
+
+  return "gpuci/${img}:22.08-cuda${cuda_ver}-devel-centos7-py${py_ver}"
+}
+
 pipeline {
   agent any
 
@@ -36,22 +51,27 @@ pipeline {
         }
 
         matrix {
-            agent {
-                label 'cpu'
-            }
+            agent any
             axes {
                 axis {
                     name 'PYTHON'
-                    values '3.8'//, '3.9'
+                    values '3.8', '3.9'
                 }
                 axis {
                     name 'CUDA'
                     values '11.5'
                 }
+                axis {
+                    name 'ARCH'
+                    values 'amd64', 'arm64'
+                }
             }
             stages {
                 stage('Build PR') {
                     when { environment name: 'BUILD_TYPE', value: 'pull-request' }
+                    agent {
+                        label "cpu4-${ARCH}"
+                    }
                     environment {
                         BUILD_TAG="xgboost-conda-build-$CUDA-$PYTHON"
                         CONDA_USERNAME="${CONDA_CHANNEL}"
@@ -59,45 +79,39 @@ pipeline {
 
                     steps {
                         script {
-                            docker.image("gpuci/rapidsai:${RAPIDS_VER}-cuda${CUDA}-devel-centos7-py${PYTHON}").inside("""
+                            def image = getImg("$PYTHON", "$ARCH")
+                            docker.image("${image}").inside("""
                             --pull=always
                             -e CUDA=${CUDA}
                             -e PY_VER=${PYTHON}
                             """) {
-                                withCredentials([[
-                                    $class: 'AmazonWebServicesCredentialsBinding',
-                                    credentialsId: "aws-s3-gpuci",
-                                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                                ]]) {
-                                    sh "${buildString}"
-                                }
+                                sh "${buildString}"
                             }
                         }
                     }
                 }
                 stage('Build Branch') {
                     when { environment name: 'BUILD_TYPE', value: 'nightly' }
+                    agent {
+                        label "cpu4-${ARCH}"
+                    }
                     environment {
                         BUILD_TAG="xgboost-conda-build-$CUDA-$PYTHON"
                         CONDA_USERNAME="${CONDA_CHANNEL}"
+                        MY_UPLOAD_KEY=credentials("rapidsai-nightly-conda-upload-api")
+                        RAPIDSAI_CONDA_KEY=credentials("rapidsai-conda-upload-api")
+                        NVIDIA_UPLOAD_KEY=credentials("nvidia-conda-upload-key")
                     }
 
                     steps {
                         script {
-                            docker.image("gpuci/rapidsai:${RAPIDS_VER}-cuda${CUDA}-devel-centos7-py${PYTHON}").inside("""
+                            def image = getImg("$PYTHON", "$ARCH")
+                            docker.image("${image}").inside("""
                             --pull=always
                             -e CUDA=${CUDA}
                             -e PY_VER=${PYTHON}
                             """) {
-                                withCredentials([[
-                                    $class: 'AmazonWebServicesCredentialsBinding',
-                                    credentialsId: "aws-s3-gpuci",
-                                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                                ]]) {
-                                    sh "${buildString}"
-                                }
+                                sh "${buildString}"
                             }
                         }
                     }

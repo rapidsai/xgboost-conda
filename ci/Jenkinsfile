@@ -1,0 +1,75 @@
+@Library('jenkins_shared_lib') _
+
+def buildString = '''#!/bin/bash
+set -e
+printenv
+
+unset SUDO_UID SUDO_GID SUDO_USER
+if [[ "$CONDA_USERNAME" == "rapidsai" ]]; then
+  export MY_UPLOAD_KEY="$RAPIDSAI_CONDA_KEY"
+fi
+#source activate gdf
+#conda-render recipes/xgboost
+source build_all.sh                        
+'''
+
+pipeline {
+  agent any
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '10'))
+    ansiColor('xterm')
+    disableConcurrentBuilds(abortPrevious: true)
+  }
+
+  stages {
+    stage("Build All") {
+        environment {
+            BUILD_TYPE = sh(returnStdout: true, script: 'rapids-build-type')
+            CONDA_CHANNEL="rapidsai-nightly"
+            XGBOOST_VERSION="1.6.0dev.rapidsai22.08"
+            XGBOOST_BUILD_NUMBER="0"
+            XGBOOST_REPO="rapidsai/xgboost"
+            XGBOOST_BRANCH="branch-22.08"
+            XGBOOST_CONDA_BRANCH="branch-22.08"
+            RAPIDS_VER="22.08"
+        }
+
+        matrix {
+            agent any
+            axes {
+                axis {
+                    name 'PYTHON'
+                    values '3.8', '3.9'
+                }
+                axis {
+                    name 'CUDA'
+                    values '11.5'
+                }
+            }
+            stages {
+                stage('Build PR') {
+                    environment {
+                        BUILD_TAG="xgboost-conda-build-$CUDA-$PYTHON"
+                        CONDA_USERNAME="${CONDA_CHANNEL}"
+                    }
+
+                    steps {
+                        sh "${buildString}"
+                    }
+                }
+                stage('Build Branch') {
+                    environment {
+                        BUILD_TAG="xgboost-conda-build-$CUDA-$PYTHON"
+                        CONDA_USERNAME="${CONDA_CHANNEL}"
+                    }
+
+                    steps {
+                        sh "${buildString}"
+                    }
+                }
+            }
+        }
+    }
+  }
+}

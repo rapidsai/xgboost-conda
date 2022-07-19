@@ -36,11 +36,13 @@ pipeline {
         }
 
         matrix {
-            agent any
+            agent {
+                label 'cpu'
+            }
             axes {
                 axis {
                     name 'PYTHON'
-                    values '3.8', '3.9'
+                    values '3.8'//, '3.9'
                 }
                 axis {
                     name 'CUDA'
@@ -49,23 +51,55 @@ pipeline {
             }
             stages {
                 stage('Build PR') {
+                    when { environment name: 'BUILD_TYPE', value: 'pull-request' }
                     environment {
                         BUILD_TAG="xgboost-conda-build-$CUDA-$PYTHON"
                         CONDA_USERNAME="${CONDA_CHANNEL}"
                     }
 
                     steps {
-                        sh "${buildString}"
+                        script {
+                            docker.image("gpuci/rapidsai:${RAPIDS_VER}-cuda${CUDA}-devel-centos7-py${PYTHON}").inside("""
+                            --pull=always
+                            -e CUDA=${CUDA}
+                            -e PY_VER=${PYTHON}
+                            """) {
+                                withCredentials([[
+                                    $class: 'AmazonWebServicesCredentialsBinding',
+                                    credentialsId: "aws-s3-gpuci",
+                                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                                ]]) {
+                                    sh "${buildString}"
+                                }
+                            }
+                        }
                     }
                 }
                 stage('Build Branch') {
+                    when { environment name: 'BUILD_TYPE', value: 'nightly' }
                     environment {
                         BUILD_TAG="xgboost-conda-build-$CUDA-$PYTHON"
                         CONDA_USERNAME="${CONDA_CHANNEL}"
                     }
 
                     steps {
-                        sh "${buildString}"
+                        script {
+                            docker.image("gpuci/rapidsai:${RAPIDS_VER}-cuda${CUDA}-devel-centos7-py${PYTHON}").inside("""
+                            --pull=always
+                            -e CUDA=${CUDA}
+                            -e PY_VER=${PYTHON}
+                            """) {
+                                withCredentials([[
+                                    $class: 'AmazonWebServicesCredentialsBinding',
+                                    credentialsId: "aws-s3-gpuci",
+                                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                                ]]) {
+                                    sh "${buildString}"
+                                }
+                            }
+                        }
                     }
                 }
             }

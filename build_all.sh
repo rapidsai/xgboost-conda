@@ -26,6 +26,8 @@ conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \
     recipes/xgboost --output > $WORKSPACE/conda-output
 
-while read line ; do
-    gpuci_retry anaconda -t ${MY_UPLOAD_KEY} upload -u ${CONDA_USERNAME:-rapidsai} --label main --force $line
-done < $WORKSPACE/conda-output
+if [ "${BUILD_TYPE}" == "nightly" ]; then
+    while read line ; do
+        gpuci_retry anaconda -t ${MY_UPLOAD_KEY} upload -u ${CONDA_USERNAME:-rapidsai} --label main --force $line
+    done < $WORKSPACE/conda-output
+fi

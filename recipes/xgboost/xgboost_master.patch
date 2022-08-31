@@ -1,16 +1,26 @@
+From e2429a0c6e51f0c1d81ba0cedc8917539696ef68 Mon Sep 17 00:00:00 2001
+From: John Kirkham <jakirkham@gmail.com>
+Date: Tue, 21 Jun 2022 19:43:10 -0700
+Subject: [PATCH] Apply RAPIDS patch
+
+---
+ python-package/setup.py | 7 -------
+ 1 file changed, 7 deletions(-)
+
 diff --git a/python-package/setup.py b/python-package/setup.py
-index c2e6fd994..14aa3d543 100644
+index 93f36de7b2..00a24e1fe5 100644
 --- a/python-package/setup.py
 +++ b/python-package/setup.py
-@@ -280,12 +280,6 @@ if __name__ == '__main__':
+@@ -337,13 +337,6 @@ def run(self) -> None:
                'scipy',
            ],
            ext_modules=[CMakeExtension('libxgboost')],
+-          # error: expected "str": "Type[Command]"
 -          cmdclass={
--              'build_ext': BuildExt,
--              'sdist': Sdist,
--              'install_lib': InstallLib,
--              'install': Install
+-              'build_ext': BuildExt,     # type: ignore
+-              'sdist': Sdist,            # type: ignore
+-              'install_lib': InstallLib,  # type: ignore
+-              'install': Install          # type: ignore
 -          },
            extras_require={
                'pandas': ['pandas'],

@@ -6,7 +6,7 @@
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
 {% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'main') %}
 {% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
-{% set rapids_version = environ.get('RAPIDS_VER', '0.16') %}
+{% set rapids_version = environ.get('RAPIDS_VER', '22.08') %}
 
 package:
   name: {{ name|lower }}
@@ -24,9 +24,6 @@ build:
   number: 2
   skip: true  # [win or linux32]
   script_env:
-    - CC
-    - CXX
-    - CUDAHOSTCXX
     - XGBOOST_VERSION
     - XGBOOST_REPO
     - XGBOOST_BRANCH
@@ -35,14 +32,13 @@ build:
     - CUDA
     - RAPIDS_VER
   ignore_run_exports_from:
-    - nvcc_linux-64 # [linux64]
-    - nvcc_linux-aarch64 # [aarch64]
+    - {{ compiler('cuda') }}
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
+    - {{ compiler('cuda') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
     - git
     - cmake
     - make
@@ -62,8 +58,7 @@ outputs:
       number: 0
       string: "{{ xgboost_proc_type }}"
       ignore_run_exports_from:
-        - nvcc_linux-64 # [linux64]
-        - nvcc_linux-aarch64 # [aarch64]
+        - {{ compiler('cuda') }}
     about:
       home: https://github.com/conda-forge/xgboost-feedstock
       license: BSD-3-Clause
@@ -75,13 +70,12 @@ outputs:
     build:
       string: cuda_{{ cuda_major }}_{{ build_number }}
       ignore_run_exports_from:
-        - nvcc_linux-64 # [linux64]
-        - nvcc_linux-aarch64 # [aarch64]
+        - {{ compiler('cuda') }}
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('cuda') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
         - git
         - cmake
         - make
@@ -102,16 +96,13 @@ outputs:
     script: install-py-xgboost.sh
     build:
       string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
-      ignore_run_exports:
-        - nvcc
       ignore_run_exports_from:
-        - nvcc_linux-64 # [linux64]
-        - nvcc_linux-aarch64 # [aarch64]
+        - {{ compiler('cuda') }}
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('nvcc') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('cuda') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
@@ -141,8 +132,7 @@ outputs:
     build:
       string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
       ignore_run_exports_from:
-        - nvcc_linux-64 # [linux64]
-        - nvcc_linux-aarch64 # [aarch64]
+        - {{ compiler('cuda') }}
     requirements:
       host:
         - python

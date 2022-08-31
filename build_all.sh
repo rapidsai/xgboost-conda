@@ -14,13 +14,13 @@ curl -s https://raw.githubusercontent.com/rapidsai/gpuci-tools/main/install.sh |
 . /opt/conda/etc/profile.d/conda.sh
 conda activate rapids
 
+# Install `boa` for `mambabuild`
+conda install -yq boa
+
 # load gpuci tools
 source ~/.bashrc
 
-#conda build -c conda-forge -c defaults recipes/nvcc
-#conda build -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge -c defaults recipes/nccl
-
-conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \
+conda mambabuild -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \
     recipes/xgboost
 
 conda build -c ${CONDA_USERNAME:-rapidsai} -c ${NVIDIA_CONDA_USERNAME:-nvidia} -c conda-forge --python=$PYTHON  \

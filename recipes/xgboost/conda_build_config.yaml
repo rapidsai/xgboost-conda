@@ -1,13 +1,13 @@
 xgboost_proc_type:
-#- cpu
-- gpu
-nvcc_compiler:
-- nvcc
+# - cpu
+  - gpu
+cuda_compiler:
+  - nvcc
 c_compiler:
   - gcc                        # [linux]
 c_compiler_version:            # [unix]
-  - 7                        # [linux64 or aarch64]
+  - 7                          # [linux64 or aarch64]
 cxx_compiler:
   - gxx                        # [linux]
 cxx_compiler_version:          # [unix]
-  - 7                        # [linux64 or aarch64]
+  - 7                          # [linux64 or aarch64]

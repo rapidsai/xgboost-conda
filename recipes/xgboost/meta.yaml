@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set xgboost_version = environ.get('XGBOOST_VERSION', '0.90.rapidsdev1') + environ.get('VERSION_SUFFIX', '') %}
+{% set xgboost_version = environ.get('XGBOOST_VERSION', '1.6.2') + environ.get('VERSION_SUFFIX', '') %}
 {% set cuda_version='.'.join(environ.get('CUDA', '11.5').split('.')[:2]) %}
 {% set cuda_major=cuda_version.split('.')[0] %}
 {% set py_version=environ.get('CONDA_PY', '36') %}

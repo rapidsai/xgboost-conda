@@ -13,8 +13,11 @@ fi
 conda activate rapids
 
 # Install `boa` for `mambabuild`
-conda install -yq boa
+mamba install -y boa
 
+conda info
+conda config --show-sources
+conda list --show-channel-urls
 
 export RAPIDS_CONDA_BLD_ROOT_DIR='/tmp/conda-bld-workspace'
 export RAPIDS_CONDA_BLD_OUTPUT_DIR='/tmp/conda-bld-output'

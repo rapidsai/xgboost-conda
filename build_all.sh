@@ -22,15 +22,19 @@ conda list --show-channel-urls
 export RAPIDS_CONDA_BLD_ROOT_DIR='/tmp/conda-bld-workspace'
 export RAPIDS_CONDA_BLD_OUTPUT_DIR='/tmp/conda-bld-output'
 
-env  | sort
+env | sort
 
 conda mambabuild \
   --python=$PYTHON \
   --croot=$RAPIDS_CONDA_BLD_ROOT_DIR \
   --output-folder=$RAPIDS_CONDA_BLD_OUTPUT_DIR \
+  --no-test \
   recipes/xgboost
 
 PKGS_TO_UPLOAD=$(find "${RAPIDS_CONDA_BLD_OUTPUT_DIR}" -name "*.tar.bz2")
+PY_XGBOOST_PKG=$(echo "$PKGS_TO_UPLOAD" | grep "py-xgboost")
+
+conda build --test "${PY_XGBOOST_PKG}"
 
 gpuci_retry anaconda \
   -t ${MY_UPLOAD_KEY} \

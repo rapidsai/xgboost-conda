@@ -19,12 +19,13 @@ conda info
 conda config --show-sources
 conda list --show-channel-urls
 
-export RAPIDS_CONDA_BLD_ROOT_DIR='/tmp/conda-bld-workspace'
-export RAPIDS_CONDA_BLD_OUTPUT_DIR='/tmp/conda-bld-output'
+export RAPIDS_CONDA_BLD_ROOT_DIR="${WORKSPACE}/conda-bld-workspace"
+export RAPIDS_CONDA_BLD_OUTPUT_DIR="${WORKSPACE}/conda-bld-output"
 
 env | sort
 
 
+gpuci_logger "Building Packages"
 # TODO: Figure out why the build fails without the `--no-test` flag.
 # Once that flag is removed, we can also remove the `conda build --test`
 # line below.
@@ -36,8 +37,9 @@ conda mambabuild \
   recipes/xgboost
 
 PKGS_TO_UPLOAD=$(find "${RAPIDS_CONDA_BLD_OUTPUT_DIR}" -name "*.tar.bz2")
-PY_XGBOOST_PKG=$(echo "$PKGS_TO_UPLOAD" | grep "py-xgboost")
 
+gpuci_logger "Testing py-xgboost package"
+PY_XGBOOST_PKG=$(echo "$PKGS_TO_UPLOAD" | grep "py-xgboost")
 conda build --test "${PY_XGBOOST_PKG}"
 
 gpuci_retry anaconda \

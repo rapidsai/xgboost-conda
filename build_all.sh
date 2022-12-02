@@ -24,6 +24,10 @@ export RAPIDS_CONDA_BLD_OUTPUT_DIR='/tmp/conda-bld-output'
 
 env | sort
 
+
+# TODO: Figure out why the build fails without the `--no-test` flag.
+# Once that flag is removed, we can also remove the `conda build --test`
+# line below.
 conda mambabuild \
   --python=$PYTHON \
   --croot=$RAPIDS_CONDA_BLD_ROOT_DIR \

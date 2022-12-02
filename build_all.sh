@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 export PATH=/conda/bin:/usr/local/cuda/bin:$PATH
 export HOME=$WORKSPACE

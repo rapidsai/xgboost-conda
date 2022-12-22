@@ -1,12 +1,12 @@
 {% set name = "xgboost" %}
 {% set xgboost_version = environ.get('XGBOOST_VERSION', '1.6.2') + environ.get('VERSION_SUFFIX', '') %}
-{% set cuda_version='.'.join(environ.get('CUDA', '11.5').split('.')[:2]) %}
-{% set cuda_major=cuda_version.split('.')[0] %}
-{% set py_version=environ.get('CONDA_PY', '36') %}
+{% set cuda_version = '.'.join(environ['RAPIDS_CUDA_VERSION'].split('.')[:2]) %}
+{% set cuda_major = cuda_version.split('.')[0] %}
+{% set py_version = environ['CONDA_PY'] %}
 {% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
 {% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'main') %}
 {% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
-{% set rapids_version = environ.get('RAPIDS_VER', '22.10') %}
+{% set rapids_version = environ.get('RAPIDS_VER', '23.02') %}
 
 package:
   name: {{ name|lower }}
@@ -28,9 +28,6 @@ build:
     - XGBOOST_REPO
     - XGBOOST_BRANCH
     - XGBOOST_BUILD_NUMBER
-    - VERSION_SUFFIX
-    - CUDA
-    - RAPIDS_VER
   ignore_run_exports_from:
     - {{ compiler('cuda') }}
 

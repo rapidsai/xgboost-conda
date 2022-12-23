@@ -20,6 +20,8 @@ source:
     - xgboost_master.patch
 
 build:
+  # TODO: Should this number use {{ build_number }}, or be removed (here or in
+  # the separate outputs)?
   number: 0
   skip: true  # [win or linux32]
   ignore_run_exports_from:

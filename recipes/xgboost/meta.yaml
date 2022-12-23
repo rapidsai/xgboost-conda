@@ -1,12 +1,12 @@
 {% set name = "xgboost" %}
-{% set xgboost_version = environ.get('XGBOOST_VERSION', '1.6.2') + environ.get('VERSION_SUFFIX', '') %}
+{% set xgboost_version = environ['XGBOOST_VERSION'] + environ.get('VERSION_SUFFIX', '') %}
 {% set cuda_version = '.'.join(environ['RAPIDS_CUDA_VERSION'].split('.')[:2]) %}
 {% set cuda_major = cuda_version.split('.')[0] %}
 {% set py_version = environ['CONDA_PY'] %}
-{% set xgboost_repo = environ.get('XGBOOST_REPO', 'dmlc/xgboost') %}
-{% set xgboost_branch = environ.get('XGBOOST_BRANCH', 'main') %}
-{% set build_number = environ.get('XGBOOST_BUILD_NUMBER', 1) %}
-{% set rapids_version = environ.get('RAPIDS_VER', '23.02') %}
+{% set xgboost_repo = environ['XGBOOST_REPO'] %}
+{% set xgboost_branch = environ['XGBOOST_BRANCH'] %}
+{% set build_number = environ['XGBOOST_BUILD_NUMBER'] %}
+{% set rapids_version = environ['RAPIDS_VERSION'] %}
 
 package:
   name: {{ name|lower }}

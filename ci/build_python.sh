@@ -7,6 +7,12 @@ source rapids-env-update
 
 export CMAKE_GENERATOR=Ninja
 
+export XGBOOST_REPO="dmlc/xgboost"
+export XGBOOST_BRANCH="main"
+export XGBOOST_VERSION="1.6.2"
+export XGBOOST_BUILD_NUMBER="0"
+export RAPIDS_VERSION="23.02"
+
 rapids-print-env
 
 rapids-logger "Begin py build"

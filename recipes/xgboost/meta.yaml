@@ -13,8 +13,7 @@ package:
   version: {{ xgboost_version }}
 
 source:
-  # we have to use git urls here to get the submodules needed for the
-  # build
+  # We have to use git urls here to get the submodules needed for the build
   git_url: https://github.com/{{ xgboost_repo }}
   git_tag: {{ xgboost_branch }}
   patches:
@@ -35,7 +34,7 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('cuda') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
+    - {{ compiler('cuda') }} ={{ cuda_version }}  # [xgboost_proc_type == "gpu"]
     - git
     - cmake
     - make
@@ -43,7 +42,7 @@ requirements:
     - librmm {{ rapids_version }}
   host:
     - cudatoolkit {{ cuda_version }}
-    - nccl >=2.5             # [xgboost_proc_type == "gpu"]
+    - nccl >=2.5  # [xgboost_proc_type == "gpu"]
     - llvm-openmp >=4.0.1  # [osx]
     - librmm {{ rapids_version }}
 
@@ -72,20 +71,20 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('cuda') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
-        - git
+        - {{ compiler('cuda') }} ={{ cuda_version }}  # [xgboost_proc_type == "gpu"]
         - cmake
+        - git
+        - llvm-openmp >=4.0.1  # [osx]
         - make
-        - llvm-openmp >=4.0.1  # [osx]
       host:
-        - llvm-openmp >=4.0.1  # [osx]
-        - nccl >=2.5             # [xgboost_proc_type == "gpu"]
         - librmm {{ rapids_version }}
+        - llvm-openmp >=4.0.1  # [osx]
+        - nccl >=2.5  # [xgboost_proc_type == "gpu"]
       run:
-        - llvm-openmp >=4.0.1  # [osx]
-        - nccl >=2.5             # [xgboost_proc_type == "gpu"]
-        - librmm {{ rapids_version }}
         - {{ pin_compatible('cudatoolkit', max_pin='x', min_pin='x') }}
+        - librmm {{ rapids_version }}
+        - llvm-openmp >=4.0.1  # [osx]
+        - nccl >=2.5  # [xgboost_proc_type == "gpu"]
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
 
@@ -99,25 +98,25 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('cuda') }} {{ cuda_version }}.*         # [xgboost_proc_type == "gpu"]
+        - {{ compiler('cuda') }} ={{ cuda_version }}  # [xgboost_proc_type == "gpu"]
         - llvm-openmp >=4.0.1  # [osx]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - python
-        - setuptools
-        - pip
         - llvm-openmp >=4.0.1  # [osx]
+        - pip
+        - python
         - rmm {{ rapids_version }}
+        - setuptools
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - llvm-openmp >=4.0.1  # [osx]
-        - python
-        - numpy
-        - scipy
-        - scikit-learn
-        - pandas >=0.25
-        - rmm {{ rapids_version }}
         - {{ pin_compatible('cudatoolkit', max_pin='x', min_pin='x') }}
+        - llvm-openmp >=4.0.1  # [osx]
+        - numpy
+        - pandas >=0.25
+        - python
+        - rmm {{ rapids_version }}
+        - scikit-learn
+        - scipy
       run_constrained:
         - xgboost-proc * {{ xgboost_proc_type }}
     test:
@@ -134,7 +133,7 @@ outputs:
       host:
         - python
         - cudatoolkit {{ cuda_version }}
-        - nccl >=2.5             # [xgboost_proc_type == "gpu"]
+        - nccl >=2.5  # [xgboost_proc_type == "gpu"]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}

@@ -17,7 +17,6 @@ jobs:
     secrets: inherit
     uses: rapidsai/shared-action-workflows/.github/workflows/pr-builder.yaml@main
   conda-python-build:
-    needs: conda-cpp-build
     secrets: inherit
     uses: rapidsai/shared-action-workflows/.github/workflows/conda-python-matrix-build.yaml@main
     with:

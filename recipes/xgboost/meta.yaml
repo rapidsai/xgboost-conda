@@ -3,8 +3,8 @@
 {% set cuda_version = '.'.join(environ['RAPIDS_CUDA_VERSION'].split('.')[:2]) %}
 {% set cuda_major = cuda_version.split('.')[0] %}
 {% set py_version = environ['CONDA_PY'] %}
-{% set xgboost_repo = environ['XGBOOST_REPO'] %}
-{% set xgboost_branch = environ['XGBOOST_BRANCH'] %}
+{% set xgboost_git_repo = environ['XGBOOST_GIT_REPO'] %}
+{% set xgboost_git_ref = environ['XGBOOST_GIT_REF'] %}
 {% set build_number = environ['XGBOOST_BUILD_NUMBER'] %}
 {% set rapids_version = environ['RAPIDS_VERSION'] %}
 
@@ -14,19 +14,14 @@ package:
 
 source:
   # We have to use git urls here to get the submodules needed for the build
-  git_url: https://github.com/{{ xgboost_repo }}
-  git_tag: {{ xgboost_branch }}
+  git_url: {{ xgboost_git_repo }}
+  git_tag: {{ xgboost_git_ref }}
   patches:
     - xgboost_master.patch
 
 build:
-  number: 2
+  number: 0
   skip: true  # [win or linux32]
-  script_env:
-    - XGBOOST_VERSION
-    - XGBOOST_REPO
-    - XGBOOST_BRANCH
-    - XGBOOST_BUILD_NUMBER
   ignore_run_exports_from:
     - {{ compiler('cuda') }}
 

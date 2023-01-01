@@ -25,7 +25,7 @@ rapids-print-env
 
 rapids-mamba-retry install \
   --channel "${PYTHON_CHANNEL}" \
-  xgboost
+  libxgboost py-xgboost xgboost
 
 rapids-logger "Check GPU usage"
 nvidia-smi

@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set xgboost_version = environ['XGBOOST_VERSION'] + environ.get('VERSION_SUFFIX', '') %}
+{% set xgboost_version = environ['XGBOOST_VERSION'] %}
 {% set cuda_version = '.'.join(environ['RAPIDS_CUDA_VERSION'].split('.')[:2]) %}
 {% set cuda_major = cuda_version.split('.')[0] %}
 {% set py_version = environ['CONDA_PY'] %}

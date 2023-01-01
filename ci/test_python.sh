@@ -21,11 +21,6 @@ set -u
 rapids-logger "Downloading artifacts from previous jobs"
 PYTHON_CHANNEL=$(rapids-download-conda-from-s3 python)
 
-RAPIDS_TESTS_DIR=${RAPIDS_TESTS_DIR:-"${PWD}/test-results"}
-RAPIDS_COVERAGE_DIR=${RAPIDS_COVERAGE_DIR:-"${PWD}/coverage-results"}
-mkdir -p "${RAPIDS_TESTS_DIR}" "${RAPIDS_COVERAGE_DIR}"
-SUITEERROR=0
-
 rapids-print-env
 
 rapids-mamba-retry install \
@@ -35,17 +30,6 @@ rapids-mamba-retry install \
 rapids-logger "Check GPU usage"
 nvidia-smi
 
-set +e
-
 rapids-logger "Run xgboost test script"
 pushd recipes/xgboost
 python test-py-xgboost.py
-exitcode=$?
-
-if (( ${exitcode} != 0 )); then
-    SUITEERROR=${exitcode}
-    echo "FAILED: 1 or more tests in xgboost"
-fi
-popd
-
-exit ${SUITEERROR}

@@ -8,10 +8,7 @@ export NCCL_ROOT="${PREFIX}"
 
 CUDA_MAJOR=$(echo ${RAPIDS_CUDA_VERSION} | cut -f 1 -d.)
 
-GPU_COMPUTE="60;70;75"
-if [[ "$CUDA_MAJOR" -ge 11 ]]; then
-    GPU_COMPUTE="$GPU_COMPUTE;80"
-fi
+GPU_COMPUTE="60;70;75;80;86;90"
 echo "GPU_COMPUTE=$GPU_COMPUTE"
 
 cmake \

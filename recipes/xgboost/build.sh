@@ -8,8 +8,7 @@ export NCCL_ROOT="${PREFIX}"
 
 CUDA_MAJOR=$(echo ${RAPIDS_CUDA_VERSION} | cut -f 1 -d.)
 
-# TODO: Add 90 once we build with CUDA 11.8 or higher
-GPU_COMPUTE="60;70;75;80;86"
+GPU_COMPUTE="60;70;75;80;86;90"
 echo "GPU_COMPUTE=$GPU_COMPUTE"
 
 cmake \

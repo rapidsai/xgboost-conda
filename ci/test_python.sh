@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2022, NVIDIA CORPORATION.
+# Copyright (c) 2022-2023, NVIDIA CORPORATION.
 
 set -euo pipefail
 
@@ -30,6 +30,13 @@ rapids-mamba-retry install \
 rapids-logger "Check GPU usage"
 nvidia-smi
 
+EXITCODE=0
+trap "EXITCODE=1" ERR
+set +e
+
 rapids-logger "Run xgboost test script"
 pushd recipes/xgboost
 python test-py-xgboost.py
+
+rapids-logger "Test script exiting with value: $EXITCODE"
+exit ${EXITCODE}

@@ -59,6 +59,7 @@ outputs:
       string: cuda_{{ cuda_major }}_{{ build_number }}
       ignore_run_exports_from:
         - {{ compiler('cuda') }}
+        - librmm
     requirements:
       build:
         - {{ compiler('c') }}

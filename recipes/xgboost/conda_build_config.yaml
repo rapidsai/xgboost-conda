@@ -6,8 +6,8 @@ cuda_compiler:
 c_compiler:
   - gcc                        # [linux]
 c_compiler_version:            # [unix]
-  - 7                          # [linux64 or aarch64]
+  - 11                         # [linux64 or aarch64]
 cxx_compiler:
   - gxx                        # [linux]
 cxx_compiler_version:          # [unix]
-  - 7                          # [linux64 or aarch64]
+  - 11                         # [linux64 or aarch64]

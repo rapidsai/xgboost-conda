@@ -56,7 +56,7 @@ outputs:
   - name: libxgboost
     script: install-libxgboost.sh
     build:
-      string: cuda_{{ cuda_major }}_{{ build_number }}
+      string: cuda{{ cuda_major }}_{{ build_number }}
       ignore_run_exports_from:
         - {{ compiler('cuda') }}
         - librmm
@@ -81,7 +81,7 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh
     build:
-      string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
+      string: cuda{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
       ignore_run_exports_from:
         - {{ compiler('cuda') }}
     requirements:
@@ -113,7 +113,7 @@ outputs:
 
   - name: xgboost
     build:
-      string: cuda_{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
+      string: cuda{{ cuda_major }}_py{{ py_version }}_{{ build_number }}
       ignore_run_exports_from:
         - {{ compiler('cuda') }}
     requirements:

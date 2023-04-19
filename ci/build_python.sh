@@ -10,8 +10,8 @@ export CMAKE_GENERATOR=Ninja
 export RAPIDS_VERSION="23.04"
 export XGBOOST_GIT_REPO="https://github.com/rapidsai/xgboost"
 export XGBOOST_GIT_REF="branch-${RAPIDS_VERSION}"
-export XGBOOST_VERSION="1.7.1dev.rapidsai${RAPIDS_VERSION}"
-export XGBOOST_BUILD_NUMBER="3"
+export XGBOOST_VERSION="1.7.5dev.rapidsai${RAPIDS_VERSION}"
+export XGBOOST_BUILD_NUMBER="0"
 
 rapids-print-env
 

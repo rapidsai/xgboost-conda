@@ -7,7 +7,7 @@ source rapids-env-update
 
 export CMAKE_GENERATOR=Ninja
 
-export RAPIDS_VERSION="23.06"
+export RAPIDS_VERSION="23.08"
 export XGBOOST_GIT_REPO="https://github.com/rapidsai/xgboost"
 export XGBOOST_GIT_REF="branch-${RAPIDS_VERSION}"
 export XGBOOST_VERSION="1.7.5dev.rapidsai${RAPIDS_VERSION}"
